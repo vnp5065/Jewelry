@@ -11,7 +11,7 @@ class Item:
         self.quantity = new_quantity
 
     def get_details(self):
-        details = {
+        return {
             'ID': self.item_id,
             'Name': self.name,
             'Category': self.category,
@@ -19,8 +19,6 @@ class Item:
             'Price': self.price,
             **self.specific_attributes
         }
-        return details
-        
 import json
 
 class Inventory:
@@ -61,7 +59,6 @@ class Inventory:
             for item_data in items_data:
                 item = Item(**item_data)
                 self.add_item(item)
-                
 class Report:
     def __init__(self, inventory):
         self.inventory = inventory
@@ -71,25 +68,20 @@ class Report:
 
     def expiry_report(self):
         return [item.get_details() for item in self.inventory.items.values()
-                if 'expiry_date' in item.specific_attributes and item.specific_attributes['expiry_date'] <= '2024-12-31']
-
-    def sales_report(self):
-        # Placeholder for future sales integration
-        return "Sales report not yet implemented."
+                if 'expiry_date' in item.specific_attributes and item.specific_attributes['expiry_date'] < '2024-10-18']
 
     def generate_report(self):
         return {
             'Total Items': len(self.inventory.items),
             'Low Stock Items': self.low_stock_report(5),
         }
-
 class User:
     def __init__(self, username, role):
         self.username = username
         self.role = role
 
     def login(self, username, password):
-        # Placeholder for actual login logic
+        # Placeholder login function (in real case, this would involve password checks)
         return username == self.username
 
     def get_permissions(self):
@@ -111,21 +103,19 @@ class User:
 item1 = Item(1, "Gold Ring", "Ring", 10, 500, size=7, color='Gold')
 item2 = Item(2, "Silver Necklace", "Necklace", 5, 300, length='18 inches', material='Silver')
 
-# Create inventory and add items
+# Manage inventory
 inventory = Inventory()
 inventory.add_item(item1)
 inventory.add_item(item2)
 
-# Create and generate reports
+# Generate reports
 report = Report(inventory)
 print(report.low_stock_report(threshold=6))
 
-# Save inventory to file
+# Save and Load from file
 inventory.save_to_file('inventory.json')
-
-# Load inventory from file
 inventory.load_from_file('inventory.json')
 
-# User management
+# User Management
 admin = User('admin_user', 'admin')
-admin.perform_inventory_actions('add_item', inventory, item=item1)
+print(admin.perform_inventory_actions('add_item', inventory, item=item1))
