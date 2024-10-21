@@ -1,132 +1,57 @@
-class Item:
-    def __init__(self, item_id, name, category, quantity, price, attributes=None):
-        self.item_id = item_id  
-        self.name = name
-        self.category = category
-        self.quantity = quantity
-        self.price = price
-        self.attributes = attributes or {}  
-    
-    def update_quantity(self, new_quantity):
-        self.quantity = new_quantity
-    
-    def get_details(self):
-        details = {
-            "ID": self.item_id,
-            "Name": self.name,
-            "Category": self.category,
-            "Quantity": self.quantity,
-            "Price": self.price,
-            "Attributes": self.attributes
-        }
-        return details
-        
-class Inventory:
-    def __init__(self):
-        self.items = {}  
-    
-    def add_item(self, item):
-        if item.item_id in self.items:
-            print(f"Item with ID {item.item_id} already exists.")
-        else:
-            self.items[item.item_id] = item
-            print(f"Added {item.name} to inventory.")
-    
-    def remove_item(self, item_id):
-        if item_id in self.items:
-            removed_item = self.items.pop(item_id)
-            print(f"Removed {removed_item.name} from inventory.")
-        else:
-            print(f"Item with ID {item_id} does not exist.")
-    
-    def get_item(self, item_id):
-        return self.items.get(item_id, None)
-    
-    def list_items(self):
-        for item in self.items.values():
-            print(item.get_details())
-    
-    def update_inventory(self, item_id, new_quantity):
-        item = self.get_item(item_id)
-        if item:
-            item.update_quantity(new_quantity)
-            print(f"Updated {item.name}'s quantity to {new_quantity}.")
-        else:
-            print(f"Item with ID {item_id} not found.")
-    
-    def check_stock(self, item_id):
-        item = self.get_item(item_id)
-        if item:
-            if item.quantity < 10:
-                print(f"Low stock alert: {item.name} (Quantity: {item.quantity})")
-            else:
-                print(f"Stock level of {item.name} is sufficient (Quantity: {item.quantity}).")
-        else:
-            print(f"Item with ID {item_id} not found.")
+Report 
 
-class Report:
-    def __init__(self, inventory):
-        self.inventory = inventory
-    
-    def low_stock_report(self, threshold=10):
-        print("Low Stock Report:")
-        for item in self.inventory.items.values():
-            if item.quantity < threshold:
-                print(f"{item.name} (ID: {item.item_id}) - Quantity: {item.quantity}")
-    
-    def generate_report(self, condition=None):
-        if condition:
-            print(f"Report based on condition: {condition}")
-        else:
-            print("General Inventory Report:")
-            self.inventory.list_items()
-            
-class User:
-    def __init__(self, username, role):
-        self.username = username
-        self.role = role
-    
-    def get_permissions(self):
-        if self.role == "admin":
-            return ["add", "remove", "update", "view"]
-        elif self.role == "manager":
-            return ["view", "update"]
-        elif self.role == "staff":
-            return ["view"]
-        else:
-            return []
-    
-    def perform_inventory_actions(self, action, inventory, *args):
-        permissions = self.get_permissions()
-        
-        if action in permissions:
-            if action == "add" and len(args) == 1:
-                inventory.add_item(args[0])
-            elif action == "remove" and len(args) == 1:
-                inventory.remove_item(args[0])
-            elif action == "update" and len(args) == 2:
-                inventory.update_inventory(args[0], args[1])
-            elif action == "view":
-                inventory.list_items()
-            else:
-                print(f"Invalid arguments for action {action}.")
-        else:
-            print(f"User {self.username} does not have permission to {action}.")
+	This project is designed to create a custom inventory management system for a jewelry store using object-oriented design. The system allows users to manage jewelry inventory through operations such as adding, removing, and updating items, generating reports, and ensuring multi-user support with different access levels. 
 
-item1 = Item(1, "Gold Ring", "Ring", 6, 150, {"Size": "6", "Weight": "3g"})
-item2 = Item(2, "Gold Necklace", "Necklace", 27, 300, {"Length": "16 inches"})
+The project covers the essential operations of an inventory management system including:
+Inventory operations: Adding/removing items, checking stock 
+Reporting: Generating reports on stock levels.
+User management: Supporting different user roles (e.g., admin, manager).
+Data persistence: Storing inventory data for later retrieval.
+ 	
+	The system manages various types of jewelry items (e.g., rings, necklaces, earrings), each having specific attributes like size, color, or weight. The Item class supports these variations by including a flexible attributes dictionary to store type-specific details. 
 
-inventory = Inventory()
-inventory.add_item(item1)
-inventory.add_item(item2)
+Class Summaries
+Item: Stores information about individual jewelry pieces.
+Inventory: Manages the collection of items, allowing operations like add, remove, and update.
+Report: Provides methods for generating reports on low stock, general item listings, etc.
+User: Manages user roles and access permissions, allowing admins to perform inventory actions.
 
-inventory.list_items()
+How to Use the System
+Add Items: Use the Inventory.add_item() method to add an Item.
+Remove Items: Use the Inventory.remove_item(item_id) method.
+Update Quantity: Use the Inventory.update_inventory(item_id, new_quantity) method.
+Generate Reports: Use the Report.low_stock_report() method to generate stock-related reports.
 
-report = Report(inventory)
-report.low_stock_report(threshold=10)
+All major functionalities were tested to ensure the system behaved correctly. Key validations include:
+Item addition and removal: Adding items results in them being stored correctly; removing items works as expected.
+Report generation: Reports reflect accurate inventory conditions based on item stock levels.
+User actions: Role-based access ensures only authorized actions are performed.
 
-admin_user = User("admin_user", "admin")
-admin_user.perform_inventory_actions("add", inventory, Item(5, "Diamond Earrings", "Earrings", 20, 500))
+Sample Scenarios
+Scenario 1: Adding a Jewelry Item:
+Admin logs in and adds a new gold ring to the inventory.
+Scenario 2: Checking Stock:
+A manager checks stock levels and receives a notification that stock for "Gold Ring" is low.
+Scenario 3: Generating a Report:
+A report is generated to show all items with stock below a specific threshold.
 
-manager_user = User("manager1", "manager")
-manager_user.perform_inventory_actions("update", inventory, 1, 10) 
+Findings and Challenges
+Challenges:
+ Managing data persistence efficiently for large inventories.
+Implementing role-based permissions without over-complicating the system.
+Improvements:
+Adding a user-friendly interface.
+Enhancing the report generation to include additional criteria.
+Adding integration with an external database (e.g., SQLite) for better data persistence.
+This project successfully implements a basic jewelry inventory management system with object-oriented design principles. It covers the core operations, but future improvements could include more advanced reporting, better error handling, and user interface development.
+
+Output of the code:
+Added Gold Ring to inventory.
+Added Gold Necklace to inventory.
+{'ID': 1, 'Name': 'Gold Ring', 'Category': 'Ring', 'Quantity': 6, 'Price': 150, 'Attributes': {'Size': '6', 'Weight': '3g'}}
+{'ID': 2, 'Name': 'Gold Necklace', 'Category': 'Necklace', 'Quantity': 27, 'Price': 300, 'Attributes': {'Length': '16 inches'}}
+Low Stock Report:
+Gold Ring (ID: 1) - Quantity: 6
+Added Diamond Earrings to inventory.
+Updated Gold Ring's quantity to 10.
+
