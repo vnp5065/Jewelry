@@ -1,6 +1,6 @@
 Report 
 
-	This project is designed to create a custom inventory management system for a jewelry store using object-oriented design. The system allows users to manage jewelry inventory through operations such as adding, removing, and updating items, generating reports, and ensuring multi-user support with different access levels. 
+This project is designed to create a custom inventory management system for a jewelry store using object-oriented design. The system allows users to manage jewelry inventory through operations such as adding, removing, and updating items, generating reports, and ensuring multi-user support with different access levels. 
 
 The project covers the essential operations of an inventory management system including:
 Inventory operations: Adding/removing items, checking stock 
@@ -8,7 +8,7 @@ Reporting: Generating reports on stock levels.
 User management: Supporting different user roles (e.g., admin, manager).
 Data persistence: Storing inventory data for later retrieval.
  	
-	The system manages various types of jewelry items (e.g., rings, necklaces, earrings), each having specific attributes like size, color, or weight. The Item class supports these variations by including a flexible attributes dictionary to store type-specific details. 
+The system manages various types of jewelry items (e.g., rings, necklaces, earrings), each having specific attributes like size, color, or weight. The Item class supports these variations by including a flexible attributes dictionary to store type-specific details. 
 
 Class Summaries
 Item: Stores information about individual jewelry pieces.
